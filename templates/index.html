@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}New Paste – PasteBin{% endblock %}
+
+{% block content %}
+<h1 class="text-2xl font-semibold text-gray-100 mb-6">New Paste</h1>
+
+{% if error %}
+<div class="mb-4 px-4 py-3 rounded-lg bg-red-900/40 border border-red-700 text-red-300 text-sm">
+  {{ error }}
+</div>
+{% endif %}
+
+<form method="post" action="/" class="space-y-5">
+
+  <!-- Title -->
+  <div>
+    <label class="block text-sm font-medium text-gray-400 mb-1" for="title">Title <span class="text-gray-600">(optional)</span></label>
+    <input
+      id="title" name="title" type="text"
+      value="{{ form.title if form else '' }}"
+      placeholder="Untitled"
+      class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-100 placeholder-gray-600 focus:outline-none focus:border-indigo-500 transition"
+    />
+  </div>
+
+  <!-- Code -->
+  <div>
+    <label class="block text-sm font-medium text-gray-400 mb-1" for="content">Code <span class="text-red-500">*</span></label>
+    <textarea
+      id="content" name="content" rows="18" required
+      placeholder="Paste your code here…"
+      class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm font-mono text-gray-100 placeholder-gray-600 focus:outline-none focus:border-indigo-500 transition resize-y"
+    >{{ form.content if form else '' }}</textarea>
+  </div>
+
+  <!-- Language + Expiry -->
+  <div class="grid grid-cols-2 gap-4">
+    <div>
+      <label class="block text-sm font-medium text-gray-400 mb-1" for="language">Language</label>
+      <select id="language" name="language"
+        class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-100 focus:outline-none focus:border-indigo-500 transition">
+        {% for value, label in languages %}
+          <option value="{{ value }}" {% if form and form.language == value %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div>
+      <label class="block text-sm font-medium text-gray-400 mb-1" for="expiry">Expires</label>
+      <select id="expiry" name="expiry"
+        class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-100 focus:outline-none focus:border-indigo-500 transition">
+        {% for value, label in expiry_labels.items() %}
+          <option value="{{ value }}">{{ label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+
+  <!-- Password -->
+  <div>
+    <label class="block text-sm font-medium text-gray-400 mb-1" for="password">
+      Password <span class="text-gray-600">(optional — leave blank for public)</span>
+    </label>
+    <input
+      id="password" name="password" type="password"
+      placeholder="••••••••"
+      class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-100 placeholder-gray-600 focus:outline-none focus:border-indigo-500 transition"
+    />
+  </div>
+
+  <button type="submit"
+    class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2.5 rounded-lg transition text-sm">
+    Create Paste →
+  </button>
+</form>
+{% endblock %}

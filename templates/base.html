@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}Pastebin{% endblock %}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <style>
+    body { font-family: 'Segoe UI', system-ui, sans-serif; }
+    .hljs { border-radius: 0.5rem; font-size: 0.875rem; line-height: 1.6; }
+    pre code.hljs { padding: 1.25rem 1.5rem; }
+  </style>
+</head>
+<body class="bg-gray-950 text-gray-100 min-h-full flex flex-col">
+
+  <!-- navbar -->
+  <header class="border-b border-gray-800 px-6 py-3 flex items-center justify-between">
+    <a href="/" class="text-indigo-400 font-bold text-lg tracking-tight hover:text-indigo-300">
+      &lt;/&gt; PasteBin
+    </a>
+    <a href="/" class="text-sm text-gray-400 hover:text-gray-200 transition">+ New Paste</a>
+  </header>
+
+  <main class="flex-1 w-full max-w-4xl mx-auto px-4 py-8">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="text-center text-gray-600 text-xs py-4">
+    Built with FastAPI · Share code instantly
+  </footer>
+
+</body>
+</html>

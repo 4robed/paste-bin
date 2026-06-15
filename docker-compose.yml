@@ -1,0 +1,14 @@
+services:
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - db_data:/app/data
+    environment:
+      DATABASE_URL: sqlite:///./data/pastebin.db
+      SECRET_KEY: ${SECRET_KEY:-change-me-in-production}
+    restart: unless-stopped
+
+volumes:
+  db_data:

@@ -1,0 +1,4 @@
+/* Custom scrollbar for code blocks */
+pre::-webkit-scrollbar { height: 6px; }
+pre::-webkit-scrollbar-track { background: #1e1e2e; }
+pre::-webkit-scrollbar-thumb { background: #44475a; border-radius: 3px; }
