@@ -60,15 +60,31 @@
 <script>
   hljs.highlightAll();
 
+  function copyToClipboard(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+      return navigator.clipboard.writeText(text);
+    }
+    const el = document.createElement("textarea");
+    el.value = text;
+    el.style.position = "absolute";
+    el.style.opacity = "0";
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand("copy");
+    document.body.removeChild(el);
+    return Promise.resolve();
+  }
+
   function copyCode() {
-    navigator.clipboard.writeText(document.getElementById("code-block").innerText);
     const btn = document.getElementById("copy-btn");
-    btn.textContent = "Copied!";
-    setTimeout(() => btn.textContent = "Copy", 2000);
+    copyToClipboard(document.getElementById("code-block").innerText).then(() => {
+      btn.textContent = "Copied!";
+      setTimeout(() => btn.textContent = "Copy", 2000);
+    });
   }
 
   function copyLink() {
-    navigator.clipboard.writeText(window.location.href);
+    copyToClipboard(window.location.href);
   }
 </script>
 {% endblock %}
