@@ -54,8 +54,9 @@ def _is_unlocked(request: Request, short_code: str) -> bool:
 @router.get("/", response_class=HTMLResponse)
 async def index(request: Request):
     return templates.TemplateResponse(
+        request,
         "index.html",
-        {"request": request, "languages": LANGUAGES, "expiry_labels": EXPIRY_LABELS},
+        {"languages": LANGUAGES, "expiry_labels": EXPIRY_LABELS},
     )
 
 
@@ -71,9 +72,9 @@ async def submit_paste(
 ):
     if not content.strip():
         return templates.TemplateResponse(
+            request,
             "index.html",
             {
-                "request": request,
                 "languages": LANGUAGES,
                 "expiry_labels": EXPIRY_LABELS,
                 "error": "Code content cannot be empty.",
@@ -101,14 +102,16 @@ async def view_paste(short_code: str, request: Request, db: Session = Depends(ge
 
     if paste.password_hash and not _is_unlocked(request, short_code):
         return templates.TemplateResponse(
+            request,
             "password.html",
-            {"request": request, "short_code": short_code, "error": None},
+            {"short_code": short_code, "error": None},
         )
 
     increment_views(db, paste)
     return templates.TemplateResponse(
+        request,
         "paste.html",
-        {"request": request, "paste": paste},
+        {"paste": paste},
     )
 
 
@@ -125,8 +128,9 @@ async def unlock_paste(
 
     if not paste.password_hash or not verify_password(password, paste.password_hash):
         return templates.TemplateResponse(
+            request,
             "password.html",
-            {"request": request, "short_code": short_code, "error": "Incorrect password."},
+            {"short_code": short_code, "error": "Incorrect password."},
         )
 
     response = RedirectResponse(url=f"/{short_code}", status_code=303)

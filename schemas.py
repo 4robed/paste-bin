@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import Optional
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, field_validator, ConfigDict
 
 
 class PasteCreate(BaseModel):
@@ -10,7 +10,7 @@ class PasteCreate(BaseModel):
     password: Optional[str] = None
     expiry: str = "never"
 
-    @validator("content")
+    @field_validator("content")
     @classmethod
     def content_not_empty(cls, v: str) -> str:
         if not v.strip():
@@ -19,6 +19,8 @@ class PasteCreate(BaseModel):
 
 
 class PasteResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     short_code: str
     title: Optional[str]
     content: str
@@ -27,6 +29,3 @@ class PasteResponse(BaseModel):
     created_at: datetime
     expires_at: Optional[datetime]
     is_protected: bool
-
-    class Config:
-        from_attributes = True

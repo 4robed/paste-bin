@@ -19,8 +19,9 @@ app.include_router(router)
 async def not_found(request: Request, exc):
     templates = Jinja2Templates(directory="templates")
     return templates.TemplateResponse(
+        request,
         "error.html",
-        {"request": request, "status": 404, "detail": exc.detail},
+        {"status": 404, "detail": exc.detail},
         status_code=404,
     )
 
@@ -29,7 +30,8 @@ async def not_found(request: Request, exc):
 async def forbidden(request: Request, exc):
     templates = Jinja2Templates(directory="templates")
     return templates.TemplateResponse(
+        request,
         "error.html",
-        {"request": request, "status": 403, "detail": exc.detail},
+        {"status": 403, "detail": exc.detail},
         status_code=403,
     )
