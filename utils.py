@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from typing import Optional, Dict
 from nanoid import generate
-from passlib.context import CryptContext
+import bcrypt
 from itsdangerous import URLSafeTimedSerializer
 from dotenv import load_dotenv
 import os
@@ -10,7 +10,6 @@ load_dotenv()
 
 SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret")
 
-_pwd_ctx = CryptContext(schemes=["bcrypt"], deprecated="auto")
 _signer = URLSafeTimedSerializer(SECRET_KEY)
 
 ALPHABET = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -44,11 +43,11 @@ def expiry_from_option(option: str) -> Optional[datetime]:
 
 
 def hash_password(password: str) -> str:
-    return _pwd_ctx.hash(password)
+    return bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
 
 
 def verify_password(plain: str, hashed: str) -> bool:
-    return _pwd_ctx.verify(plain, hashed)
+    return bcrypt.checkpw(plain.encode(), hashed.encode())
 
 
 def make_unlock_cookie(short_code: str) -> str:
